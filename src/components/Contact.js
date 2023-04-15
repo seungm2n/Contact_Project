@@ -35,7 +35,7 @@ export default class Contact extends Component{
         this.handleEdit = this.handleEdit.bind(this);
       }
       
-      componentWillMount() {
+      UNSAFE_componentWillMount() {
         const contactData = localStorage.contactData;
         
         if(contactData) {
