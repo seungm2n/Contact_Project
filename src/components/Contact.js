@@ -1,7 +1,10 @@
 /* eslint-disable eqeqeq */
 import React, { Component } from 'react';
 import ContactInfo from './ContactInfo';
+import update from 'react-addons-update';
 import ContactDetail from './ContactDetail';
+import ContactCreate from './ContactCreate';
+
 
 export default class Contact extends Component{
     
@@ -26,6 +29,10 @@ export default class Contact extends Component{
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        
+        this.handleCreate = this.handleCreate.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
       }
       
       handleChange(e){
@@ -40,6 +47,37 @@ export default class Contact extends Component{
         });
         
         console.log(key, 'is selected');
+      }
+      
+      handleCreate(contact) {
+        this.setState({
+          contactData: update(this.state.contactData, { $push: [contact]})
+        });
+      }
+      
+      handleRemove() {
+        if(this.state.selectedKey < 0 ) {
+          return;
+        }
+        this.setState({
+          contactData: update(this.state.contactData, 
+                { $splice: [[this.state.selectedKey]]}
+          ),
+          selectedKey: -1
+        });
+      }
+      
+      handleEdit(name, phone) {
+        this.setState({
+          contactData: update(this.state.contactData,
+              {
+                [this.state.selectedKey] : {
+                  name: { $set: name},
+                  phone: { $set: phone}
+                }
+              }
+            )
+        });
       }
       
     render(){
@@ -73,6 +111,11 @@ export default class Contact extends Component{
                 <ContactDetail 
                   isSelected={this.state.selectedKey != -1}
                   contact={this.state.contactData[this.state.selectedKey]}
+                  onRemove={this.handleRemove}
+                  onEdit={this.handleEdit}
+                />
+                <ContactCreate 
+                  onCreate = {this.handleCreate}
                 />
             </div>
         );
