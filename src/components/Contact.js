@@ -4,6 +4,7 @@ import ContactInfo from './ContactInfo';
 import update from 'react-addons-update';
 import ContactDetail from './ContactDetail';
 import ContactCreate from './ContactCreate';
+//import { Helmet } from "react-helmet";
 
 
 export default class Contact extends Component{
@@ -35,7 +36,7 @@ export default class Contact extends Component{
         this.handleEdit = this.handleEdit.bind(this);
       }
       
-      UNSAFE_componentWillMount() {
+      componentDidMount() {
         const contactData = localStorage.contactData;
         
         if(contactData) {
